@@ -25,3 +25,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- default "default" .Values.serviceAccount.name -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "discourse.createSecret" -}}
+{{- if or (not .Values.postgresql.existingSecret) (not .Values.discourse.smtp.existingSecret) (not .Values.redis.existingSecret) (not .Values.discourse.s3.existingSecret) -}}true{{- end -}}
+{{- end -}}
