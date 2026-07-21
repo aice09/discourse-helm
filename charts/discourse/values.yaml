@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: discourse/base
-  tag: "2.0.20240226-0027"
+  repository: discourse/discourse
+  tag: "2026.7.0-latest"
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -35,6 +35,9 @@ ingress:
 
 resources: {}
 
+extraEnv: []
+extraEnvFrom: []
+
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -53,8 +56,18 @@ discourse:
     port: 587
     username: ""
     password: ""
+    existingSecret: ""
+    usernameKey: smtp-username
+    passwordKey: smtp-password
     authentication: login
     enableStartTls: true
+  plugins: []
+  pluginInit:
+    enabled: false
+    image:
+      repository: alpine/git
+      tag: "2.45.2"
+      pullPolicy: IfNotPresent
   s3:
     enabled: false
     bucket: ""
@@ -62,20 +75,28 @@ discourse:
     endpoint: ""
     accessKeyId: ""
     secretAccessKey: ""
+    existingSecret: ""
+    accessKeyIdKey: access-key-id
+    secretAccessKeyKey: secret-access-key
 
 postgresql:
-  enabled: true
-  host: ""
+  enabled: false
+  host: discourse-postgres-rw
   port: 5432
   database: discourse
   username: discourse
-  password: discourse
+  password: ""
+  existingSecret: ""
+  usernameKey: username
+  passwordKey: password
 
 redis:
-  enabled: true
-  host: ""
+  enabled: false
+  host: discourse-redis-master
   port: 6379
   password: ""
+  existingSecret: ""
+  passwordKey: password
 
 persistence:
   enabled: true

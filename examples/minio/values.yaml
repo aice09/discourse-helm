@@ -5,3 +5,11 @@ discourse:
     bucket: discourse
     region: us-east-1
     endpoint: http://minio.minio.svc.cluster.local:9000
+    existingSecret: discourse-minio
+
+postgresql:
+  host: discourse-postgres-rw.default.svc.cluster.local
+  existingSecret: discourse-postgres-app
+
+redis:
+  host: discourse-redis-master.default.svc.cluster.local

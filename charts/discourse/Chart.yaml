@@ -3,7 +3,7 @@ name: discourse
 description: A community-maintained Helm chart for deploying Discourse.
 type: application
 version: 0.1.0
-appVersion: "3.3.0"
+appVersion: "2026.7.0-latest"
 home: https://www.discourse.org/
 sources:
   - https://github.com/discourse/discourse
