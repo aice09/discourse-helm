@@ -1,0 +1,17 @@
+discourse:
+  hostname: forum.example.test
+  developerEmails: admin@example.test
+
+postgresql:
+  host: discourse-postgres-rw.default.svc.cluster.local
+  database: app
+  username: app
+  existingSecret: discourse-postgres-app
+  usernameKey: username
+  passwordKey: password
+
+redis:
+  host: discourse-redis-master.default.svc.cluster.local
+
+persistence:
+  enabled: false

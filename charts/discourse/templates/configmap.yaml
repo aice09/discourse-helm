@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "discourse.fullname" . }}
+  labels:
+    {{- include "discourse.labels" . | nindent 4 }}
+data:
+  DISCOURSE_HOSTNAME: {{ .Values.discourse.hostname | quote }}
+  DISCOURSE_DEVELOPER_EMAILS: {{ .Values.discourse.developerEmails | quote }}
+  DISCOURSE_SMTP_ADDRESS: {{ .Values.discourse.smtp.address | quote }}
+  DISCOURSE_SMTP_PORT: {{ .Values.discourse.smtp.port | quote }}
+  DISCOURSE_SMTP_AUTHENTICATION: {{ .Values.discourse.smtp.authentication | quote }}
+  DISCOURSE_SMTP_ENABLE_START_TLS: {{ .Values.discourse.smtp.enableStartTls | quote }}
+  DISCOURSE_DB_HOST: {{ required "postgresql.host is required; point it at an external PostgreSQL service such as a CNPG rw service" .Values.postgresql.host | quote }}
+  DISCOURSE_DB_PORT: {{ .Values.postgresql.port | quote }}
+  DISCOURSE_DB_NAME: {{ .Values.postgresql.database | quote }}
+  DISCOURSE_REDIS_HOST: {{ required "redis.host is required; point it at an external Redis service" .Values.redis.host | quote }}
+  DISCOURSE_REDIS_PORT: {{ .Values.redis.port | quote }}
+  DISCOURSE_USE_S3: {{ .Values.discourse.s3.enabled | quote }}
+  DISCOURSE_S3_BUCKET: {{ .Values.discourse.s3.bucket | quote }}
+  DISCOURSE_S3_REGION: {{ .Values.discourse.s3.region | quote }}
+  DISCOURSE_S3_ENDPOINT: {{ .Values.discourse.s3.endpoint | quote }}
+  plugins.txt: |
+    {{- range .Values.discourse.plugins }}
+    {{ . | quote }}
+    {{- end }}

@@ -1,0 +1,106 @@
+replicaCount: 1
+
+image:
+  repository: discourse/discourse
+  tag: "2026.7.0-latest"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: discourse.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources: {}
+
+extraEnv: []
+extraEnvFrom: []
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+discourse:
+  hostname: discourse.local
+  developerEmails: "admin@example.com"
+  smtp:
+    address: ""
+    port: 587
+    username: ""
+    password: ""
+    existingSecret: ""
+    usernameKey: smtp-username
+    passwordKey: smtp-password
+    authentication: login
+    enableStartTls: true
+  plugins: []
+  pluginInit:
+    enabled: false
+    image:
+      repository: alpine/git
+      tag: "2.45.2"
+      pullPolicy: IfNotPresent
+  s3:
+    enabled: false
+    bucket: ""
+    region: ""
+    endpoint: ""
+    accessKeyId: ""
+    secretAccessKey: ""
+    existingSecret: ""
+    accessKeyIdKey: access-key-id
+    secretAccessKeyKey: secret-access-key
+
+postgresql:
+  enabled: false
+  host: discourse-postgres-rw
+  port: 5432
+  database: discourse
+  username: discourse
+  password: ""
+  existingSecret: ""
+  usernameKey: username
+  passwordKey: password
+
+redis:
+  enabled: false
+  host: discourse-redis-master
+  port: 6379
+  password: ""
+  existingSecret: ""
+  passwordKey: password
+
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: ""
+  accessModes:
+    - ReadWriteOnce

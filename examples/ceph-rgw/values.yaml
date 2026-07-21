@@ -1,0 +1,15 @@
+discourse:
+  hostname: forum.example.com
+  s3:
+    enabled: true
+    bucket: discourse
+    region: us-east-1
+    endpoint: https://rgw.example.com
+    existingSecret: discourse-rgw
+
+postgresql:
+  host: discourse-postgres-rw.database.svc.cluster.local
+  existingSecret: discourse-postgres-app
+
+redis:
+  host: discourse-redis-master.cache.svc.cluster.local

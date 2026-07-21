@@ -1,0 +1,48 @@
+replicaCount: 2
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    memory: 2Gi
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: forum.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: forum-example-com-tls
+      hosts:
+        - forum.example.com
+
+discourse:
+  hostname: forum.example.com
+  developerEmails: ops@example.com
+  smtp:
+    address: smtp.example.com
+    existingSecret: discourse-smtp
+  pluginInit:
+    enabled: true
+  plugins:
+    - https://github.com/discourse/discourse-solved.git
+
+postgresql:
+  host: discourse-postgres-rw.database.svc.cluster.local
+  database: app
+  username: app
+  existingSecret: discourse-postgres-app
+  usernameKey: username
+  passwordKey: password
+
+redis:
+  host: discourse-redis-master.cache.svc.cluster.local
+  existingSecret: discourse-redis
+  passwordKey: redis-password
+
+persistence:
+  size: 100Gi
