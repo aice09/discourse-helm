@@ -1,0 +1,28 @@
+{{- if .Values.startupJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "discourse.fullname" . }}-startup
+  labels:
+    {{- include "discourse.labels" . | nindent 4 }}
+    app.kubernetes.io/component: startup
+  annotations:
+    {{- toYaml .Values.startupJob.annotations | nindent 4 }}
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: {{ include "discourse.serviceAccountName" . }}
+      containers:
+        - name: startup
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            {{- toYaml .Values.startupJob.command | nindent 12 }}
+          args:
+            {{- toYaml .Values.startupJob.args | nindent 12 }}
+          envFrom:
+            {{- include "discourse.envFrom" . | nindent 12 }}
+          env:
+            {{- include "discourse.env" . | nindent 12 }}
+{{- end }}

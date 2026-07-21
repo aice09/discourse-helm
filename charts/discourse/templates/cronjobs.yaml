@@ -1,0 +1,32 @@
+{{- range $name, $job := .Values.cronJobs }}
+{{- if $job.enabled }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "discourse.fullname" $ }}-{{ $name }}
+  labels:
+    {{- include "discourse.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $name | quote }}
+spec:
+  schedule: {{ $job.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: {{ include "discourse.serviceAccountName" $ }}
+          containers:
+            - name: {{ $name }}
+              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              command:
+                {{- toYaml $job.command | nindent 16 }}
+              args:
+                {{- toYaml $job.args | nindent 16 }}
+              envFrom:
+                {{- include "discourse.envFrom" $ | nindent 16 }}
+              env:
+                {{- include "discourse.env" $ | nindent 16 }}
+{{- end }}
+{{- end }}

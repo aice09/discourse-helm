@@ -40,3 +40,18 @@ discourse:
   plugins:
     - https://github.com/discourse/discourse-solved.git
 ```
+
+
+## Production processes
+
+Production deployments should run both the web deployment and the dedicated Sidekiq deployment. Sidekiq handles email delivery, background jobs, indexing, plugin jobs, scheduled tasks, badges, and digest emails. The chart enables Sidekiq by default and exposes `sidekiq.replicaCount`, `sidekiq.command`, `sidekiq.args`, and `sidekiq.resources` for tuning.
+
+The chart also includes optional operational resources:
+
+- `migrationJob.enabled` runs database migrations as a Helm hook.
+- `startupJob.enabled` can run one-time post-install/post-upgrade startup work.
+- `cronJobs.backup` and `cronJobs.maintenance` provide scheduled task hooks.
+- `podDisruptionBudget.enabled` protects availability during voluntary disruptions.
+- `networkPolicy.enabled` lets operators restrict ingress and egress.
+- `serviceMonitor.enabled` integrates with Prometheus Operator.
+- `rbac.create` creates a Role and RoleBinding when workload permissions are needed.

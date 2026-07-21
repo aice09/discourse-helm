@@ -104,3 +104,76 @@ persistence:
   storageClass: ""
   accessModes:
     - ReadWriteOnce
+
+web:
+  command: []
+  args: []
+
+sidekiq:
+  enabled: true
+  replicaCount: 1
+  command:
+    - /bin/bash
+    - -lc
+  args:
+    - bundle exec sidekiq -C config/sidekiq.yml
+  resources: {}
+
+migrationJob:
+  enabled: true
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  command:
+    - /bin/bash
+    - -lc
+  args:
+    - bundle exec rake db:migrate
+
+startupJob:
+  enabled: false
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  command:
+    - /bin/bash
+    - -lc
+  args:
+    - bundle exec rake assets:precompile
+
+cronJobs:
+  backup:
+    enabled: false
+    schedule: "0 3 * * *"
+    command:
+      - /bin/bash
+      - -lc
+    args:
+      - bundle exec rake backups:create
+  maintenance:
+    enabled: false
+    schedule: "30 3 * * 0"
+    command:
+      - /bin/bash
+      - -lc
+    args:
+      - bundle exec rake db:migrate
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+networkPolicy:
+  enabled: false
+  ingress: []
+  egress: []
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {}
+
+rbac:
+  create: false
+  rules: []

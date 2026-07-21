@@ -44,5 +44,18 @@ redis:
   existingSecret: discourse-redis
   passwordKey: redis-password
 
+sidekiq:
+  enabled: true
+  replicaCount: 2
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+cronJobs:
+  backup:
+    enabled: true
+    schedule: "0 3 * * *"
+
 persistence:
   size: 100Gi

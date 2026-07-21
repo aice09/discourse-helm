@@ -1,0 +1,32 @@
+{{- if .Values.migrationJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "discourse.fullname" . }}-migrate
+  labels:
+    {{- include "discourse.labels" . | nindent 4 }}
+    app.kubernetes.io/component: migration
+  annotations:
+    {{- toYaml .Values.migrationJob.annotations | nindent 4 }}
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "discourse.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: migration
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: {{ include "discourse.serviceAccountName" . }}
+      containers:
+        - name: migrate
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            {{- toYaml .Values.migrationJob.command | nindent 12 }}
+          args:
+            {{- toYaml .Values.migrationJob.args | nindent 12 }}
+          envFrom:
+            {{- include "discourse.envFrom" . | nindent 12 }}
+          env:
+            {{- include "discourse.env" . | nindent 12 }}
+{{- end }}
