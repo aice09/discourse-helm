@@ -1,0 +1,6 @@
+discourse:
+  hostname: forum.example.test
+  developerEmails: admin@example.test
+
+persistence:
+  enabled: false

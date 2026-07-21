@@ -1,0 +1,6 @@
+discourse:
+  hostname: forum.example.com
+  s3:
+    enabled: true
+    bucket: discourse-uploads
+    region: us-east-1

@@ -1,0 +1,85 @@
+replicaCount: 1
+
+image:
+  repository: discourse/base
+  tag: "2.0.20240226-0027"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: discourse.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+discourse:
+  hostname: discourse.local
+  developerEmails: "admin@example.com"
+  smtp:
+    address: ""
+    port: 587
+    username: ""
+    password: ""
+    authentication: login
+    enableStartTls: true
+  s3:
+    enabled: false
+    bucket: ""
+    region: ""
+    endpoint: ""
+    accessKeyId: ""
+    secretAccessKey: ""
+
+postgresql:
+  enabled: true
+  host: ""
+  port: 5432
+  database: discourse
+  username: discourse
+  password: discourse
+
+redis:
+  enabled: true
+  host: ""
+  port: 6379
+  password: ""
+
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: ""
+  accessModes:
+    - ReadWriteOnce
