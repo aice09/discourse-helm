@@ -31,3 +31,13 @@ Run chart checks:
 ```sh
 make test
 ```
+
+## Production workloads
+
+The chart renders the web Deployment plus production support workloads for Discourse:
+
+- a dedicated Sidekiq Deployment for background jobs, email delivery, search indexing, plugin jobs, and scheduled work;
+- pre-install/pre-upgrade migration Job support and an optional startup Job;
+- optional PodDisruptionBudget, NetworkPolicy, ServiceMonitor, RBAC, and CronJob templates for operational hardening.
+
+See `charts/discourse/values.yaml` for the corresponding `sidekiq`, `migrationJob`, `startupJob`, `podDisruptionBudget`, `networkPolicy`, `serviceMonitor`, `rbac`, and `cronJobs` settings.

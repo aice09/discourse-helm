@@ -104,3 +104,64 @@ persistence:
   storageClass: ""
   accessModes:
     - ReadWriteOnce
+
+sidekiq:
+  enabled: true
+  replicaCount: 1
+  command:
+    - /bin/bash
+    - -c
+    - cd /var/www/discourse && bundle exec sidekiq
+  resources: {}
+  podAnnotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+migrationJob:
+  enabled: true
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 86400
+  command:
+    - /bin/bash
+    - -c
+    - cd /var/www/discourse && bundle exec rake db:migrate
+
+startupJob:
+  enabled: false
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 86400
+  command:
+    - /bin/bash
+    - -c
+    - cd /var/www/discourse && bundle exec rake db:seed_fu
+
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+
+networkPolicy:
+  enabled: false
+  ingress: []
+  egress: []
+
+serviceMonitor:
+  enabled: false
+  labels: {}
+  interval: 30s
+  scrapeTimeout: 10s
+  path: /metrics
+
+rbac:
+  create: false
+  rules: []
+
+cronJobs: []
+# - name: backup
+#   schedule: "0 2 * * *"
+#   command:
+#     - /bin/bash
+#     - -c
+#     - cd /var/www/discourse && bundle exec rake backups:create
+#   successfulJobsHistoryLimit: 3
+#   failedJobsHistoryLimit: 1
