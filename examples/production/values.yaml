@@ -1,0 +1,31 @@
+replicaCount: 2
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    memory: 2Gi
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: forum.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: forum-example-com-tls
+      hosts:
+        - forum.example.com
+
+discourse:
+  hostname: forum.example.com
+  developerEmails: ops@example.com
+  smtp:
+    address: smtp.example.com
+    username: discourse@example.com
+
+persistence:
+  size: 100Gi

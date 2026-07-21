@@ -1,0 +1,7 @@
+discourse:
+  hostname: forum.example.test
+  s3:
+    enabled: true
+    bucket: discourse
+    region: us-east-1
+    endpoint: http://minio.minio.svc.cluster.local:9000

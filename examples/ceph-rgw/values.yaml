@@ -1,0 +1,7 @@
+discourse:
+  hostname: forum.example.com
+  s3:
+    enabled: true
+    bucket: discourse
+    region: us-east-1
+    endpoint: https://rgw.example.com
